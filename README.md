@@ -1,75 +1,462 @@
-# Dual-Engine Movie Review Sentiment Classifier
+# 🎬 Dual-Engine Movie Review Sentiment Classifier
 
-An interactive NLP evaluation platform that compares a traditional machine learning baseline against a fine-tuned deep learning Transformer. This architecture serves as a performance test-bench to evaluate the real-world trade-offs between inference latency and contextual accuracy.
+<p align="center">
 
-🔗 **Live Production App:** [Launch Streamlit Dashboard](https://customersentimentbert-n6emezcfiq7fbm72hqqgbs.streamlit.app)
+![Python](https://img.shields.io/badge/Python-3.10+-blue?style=for-the-badge\&logo=python)
+![PyTorch](https://img.shields.io/badge/PyTorch-Deep%20Learning-red?style=for-the-badge\&logo=pytorch)
+![Transformers](https://img.shields.io/badge/HuggingFace-Transformers-yellow?style=for-the-badge\&logo=huggingface)
+![Streamlit](https://img.shields.io/badge/Streamlit-Deployed-success?style=for-the-badge\&logo=streamlit)
+![NLP](https://img.shields.io/badge/NLP-Sentiment%20Analysis-purple?style=for-the-badge)
+
+</p>
+
+<p align="center">
+<a href="https://customersentimentbert-n6emezcfiq7fbm72hqqgbs.streamlit.app">
+<img src="https://static.streamlit.io/badges/streamlit_badge.svg">
+</a>
+</p>
 
 ---
 
-## Project Architecture & Step-by-Step Implementation
+## 🚀 Live Demo
+
+👉 **Try the application here**
+
+https://customersentimentbert-n6emezcfiq7fbm72hqqgbs.streamlit.app
+
+---
+
+## 📸 Application Preview
+
+<p align="center">
+  <img src="images/app_preview.png" alt="Dual Engine Sentiment Classifier" width="900">
+</p>
+
+<p align="center">
+Compare a traditional TF-IDF + Logistic Regression model against a fine-tuned DistilBERT Transformer in real time.
+</p>
+
+**Example:** The baseline model classifies the review as **Negative**, while DistilBERT recognizes the nuanced sentiment and predicts **Positive**, highlighting the importance of contextual understanding in Natural Language Processing.
+
+---
+
+# 📌 Project Overview
+
+This project compares two fundamentally different approaches to sentiment analysis:
+
+| Engine            | Approach                     |
+| ----------------- | ---------------------------- |
+| ⚡ Baseline Model  | TF-IDF + Logistic Regression |
+| 🧠 Advanced Model | Fine-Tuned DistilBERT        |
+
+Rather than focusing solely on accuracy, this project explores a common machine learning engineering challenge:
+
+> How much additional accuracy is worth the extra computational cost?
+
+The application allows users to submit movie reviews and instantly compare predictions from both models side-by-side.
+
+---
+
+# 🎯 Business Objective
+
+Organizations often face a trade-off between:
+
+* Fast and inexpensive predictions
+* More accurate but computationally expensive models
+
+This project serves as a practical benchmark framework for evaluating:
+
+* Accuracy
+* Inference latency
+* Context understanding
+* Deployment complexity
+* Production scalability
+
+---
+
+# 🏗️ Solution Architecture
+
+```text
+User Review
+     │
+     ▼
+┌─────────────────┐
+│  Streamlit UI   │
+└─────────────────┘
+     │
+     ├───────────────┐
+     ▼               ▼
+
+┌────────────┐   ┌──────────────┐
+│ Logistic   │   │ DistilBERT   │
+│ Regression │   │ Transformer  │
+└────────────┘   └──────────────┘
+
+     │               │
+     ▼               ▼
+
+ Sentiment       Sentiment
+ Prediction      Prediction
+
+     │               │
+     └──────┬────────┘
+            ▼
+
+     Side-by-Side Comparison
+```
+
+---
+
+# 📂 Project Structure
 
 ```text
 customer_sentiment_bert/
+│
 ├── data/
-│   └── processed/                # Tokenized and cleaned train/val/test splits
+│   └── processed/
+│
 ├── models/
-│   └── baseline_logreg.pkl       # Serialized traditional baseline model
+│   └── baseline_logreg.pkl
+│
 ├── notebooks/
 │   ├── 01_eda_preprocessing.ipynb
 │   ├── 02_baseline_model.ipynb
 │   └── 03_bert_finetuning.ipynb
+│
 ├── src/
-│   ├── __init__.py
-│   ├── dataset.py                # PyTorch Dataset pipeline for tokenization
-│   └── model.py                  # Helper functions for inference pipelines
-├── requirements.txt              # Production dependency footprint
-└── streamlit_app.py              # Live multi-engine UI portal
+│   ├── dataset.py
+│   ├── model.py
+│   └── __init__.py
+│
+├── images/
+│   └── app_preview.png
+│
+├── requirements.txt
+│
+└── streamlit_app.py
+```
 
-Phase 1: Environment & Directory Initialization
-The project began by establishing a structured workspace modeled after clean software engineering workflows. This setup isolates raw data structures, source scripts, Jupyter development environments, and serialized model binaries into distinct, trackable zones.
+---
 
-Phase 2: Exploratory Data Analysis & Text Preprocessing
-Using the IMDB movie review dataset, text sequences underwent a clean preprocessing pipeline:
+# 🔍 Dataset
 
-HTML tags, non-alphabetic characters, and system noise were stripped.
+### IMDB Movie Review Dataset
 
-Sequences were normalized through lowercasing and whitespacing.
+The project uses the IMDB sentiment analysis dataset containing positive and negative movie reviews.
 
-The clean text corpuses were stratified and split into deterministic train_clean.csv, val_clean.csv, and test_clean.csv distributions to prevent target leakage.
+The dataset provides:
 
-Phase 3: Traditional Baseline Modeling
-To establish a performance floor, a fast, traditional statistical machine learning engine was developed:
+* Real-world user-generated text
+* Balanced sentiment classes
+* Long-form review content
+* Strong benchmark value for NLP evaluation
 
-Vectorization: Cleaned text blocks were converted into numerical feature matrices using Term Frequency-Inverse Document Frequency (TF-IDF) unigram and bigram feature extractions.
+---
 
-Classification: A Logistic Regression classifier was trained on the sparse matrices.
+# ⚙️ Development Workflow
 
-Outcome: This baseline achieved high execution speeds, processing inference requests in under 2 milliseconds, but struggled to capture structural context like sarcasm, structural shifts, or complex negations.
+## Phase 1 — Environment Setup
 
-Phase 4: Transformer Fine-Tuning (Deep Learning)
-To address the contextual blind spots of the baseline, a state-of-the-art Transformer engine was integrated:
+Established a structured project architecture separating:
 
-Architecture: Selected DistilBERT (distilbert-base-uncased) for its lightweight signature, retaining 95% of BERT’s linguistic capabilities while reducing parameter density by 40%.
+* Data assets
+* Source code
+* Experiments
+* Trained models
+* Deployment components
 
-Tokenization: Text sequences were processed using Hugging Face's fast tokenizers into dynamic attention masks and input IDs.
+---
 
-Training: The base model was fine-tuned using PyTorch and the Hugging Face Trainer API across multiple epochs, optimizing cross-entropy loss against validation metrics.
+## Phase 2 — Data Cleaning & Preprocessing
 
-Phase 5: Cloud Decoupling & Storage Optimization
-To maintain a clean version-control history and bypass GitHub’s strict 100MB repository limit, a strategic design choice was implemented:
+Text preprocessing included:
 
-Git tracking rules (.gitignore) were set up to completely block heavy binary model layers (*.safetensors, *.pt, *.bin) from the GitHub code tree.
+* HTML tag removal
+* Noise reduction
+* Lowercasing
+* Special character removal
+* Whitespace normalization
 
-A specialized model repository was established on the Hugging Face Model Hub at amitkadia79/movie-sentiment-distilbert.
+Output datasets:
 
-The fully trained model weights, tokenizer vocabularies, and network configurations were uploaded directly to the Hugging Face Cloud infrastructure.
+```text
+train_clean.csv
+val_clean.csv
+test_clean.csv
+```
 
-Phase 6: Production UI & Live Deployment
-The project culminated in a live, user-facing diagnostic application:
+This ensured reproducibility and prevented target leakage.
 
-Dashboard Logic: A Streamlit application was constructed to handle live text input fields and coordinate parallel backend scoring runs.
+---
 
-Dynamic Streaming: The code uses Hugging Face's transformers client API inside the application layer. When the app initializes in the cloud, it dynamically fetches configuration files and model tensors directly from the Hugging Face Hub, caching them locally for subsequent executions.
+## Phase 3 — Traditional Machine Learning Baseline
 
-Infrastructure Hosting: The repository was linked to Streamlit Community Cloud, creating a continuous deployment pipeline that automatically re-initializes whenever changes land on the main branch.
+### Feature Engineering
 
+TF-IDF Vectorization
+
+* Unigrams
+* Bigrams
+
+### Classification Model
+
+```text
+Logistic Regression
+```
+
+### Strengths
+
+✅ Extremely fast
+
+✅ Lightweight deployment
+
+✅ Minimal infrastructure requirements
+
+### Limitations
+
+❌ Limited contextual understanding
+
+❌ Sensitive to word order
+
+❌ Struggles with sarcasm and sentiment shifts
+
+---
+
+## Phase 4 — Transformer Fine-Tuning
+
+### Model Selected
+
+```text
+distilbert-base-uncased
+```
+
+DistilBERT was selected because it:
+
+* Retains approximately 95% of BERT performance
+* Uses roughly 40% fewer parameters
+* Delivers faster inference than full BERT
+
+### Training Stack
+
+* PyTorch
+* Hugging Face Transformers
+* Trainer API
+
+### Benefits
+
+✅ Context-aware predictions
+
+✅ Better negation handling
+
+✅ Stronger sentiment reasoning
+
+✅ Improved classification accuracy
+
+---
+
+## Phase 5 — Cloud Model Hosting
+
+Large transformer models exceed GitHub's repository limits.
+
+To address this:
+
+### GitHub Stores
+
+* Source code
+* Notebooks
+* Configuration files
+
+### Hugging Face Stores
+
+* Model weights
+* Tokenizer assets
+* Model configurations
+
+Benefits:
+
+* Smaller repository size
+* Faster cloning
+* Cleaner version control history
+
+---
+
+## Phase 6 — Deployment
+
+### Frontend
+
+Streamlit
+
+### Model Hosting
+
+Hugging Face Hub
+
+### Infrastructure
+
+Streamlit Community Cloud
+
+Deployment flow:
+
+```text
+App Launch
+     ↓
+Load Model from HF Hub
+     ↓
+Cache Locally
+     ↓
+Serve Predictions
+```
+
+---
+
+# 📊 Performance Benchmark
+
+| Metric                | Logistic Regression | DistilBERT  |
+| --------------------- | ------------------- | ----------- |
+| Architecture          | TF-IDF + LR         | Transformer |
+| Inference Latency     | ~1.5 ms             | ~25 ms      |
+| Context Understanding | Low                 | High        |
+| Negation Handling     | Weak                | Strong      |
+| Sarcasm Detection     | Poor                | Better      |
+| Deployment Cost       | Low                 | Higher      |
+
+---
+
+# 📈 Model Evaluation Results
+
+Both models were evaluated on unseen test data.
+
+| Metric                | TF-IDF + Logistic Regression | Fine-Tuned DistilBERT |
+| --------------------- | ---------------------------- | --------------------- |
+| Test Accuracy         | 88.92%                       | **91.08%**            |
+| Validation Accuracy   | 89.32%                       | **91.54%**            |
+| Inference Speed       | ~1.5 ms                      | ~25 ms                |
+| Context Understanding | Limited                      | Advanced              |
+| Negation Handling     | Weak                         | Strong                |
+| Overall Performance   | Good                         | Better                |
+
+---
+
+## 🔍 Key Findings
+
+### Traditional ML Remains Competitive
+
+The TF-IDF + Logistic Regression baseline achieved an impressive **88.92% accuracy**, demonstrating why traditional NLP models remain attractive for low-latency production environments.
+
+### Transformers Deliver Better Contextual Understanding
+
+The fine-tuned DistilBERT model achieved **91.08% test accuracy**, outperforming the baseline by **2.16 percentage points** on unseen reviews.
+
+### Accuracy vs Latency Trade-Off
+
+| Consideration         | Logistic Regression | DistilBERT     |
+| --------------------- | ------------------- | -------------- |
+| Speed                 | ✅ Excellent         | ⚠ Slower       |
+| Compute Cost          | ✅ Low               | ⚠ Higher       |
+| Context Understanding | ⚠ Limited           | ✅ Strong       |
+| Scalability           | ✅ Easy              | ⚠ More Complex |
+| Accuracy              | Good                | Better         |
+
+This demonstrates that model selection should be driven by business requirements rather than accuracy alone.
+
+---
+
+# 🛠 Skills Demonstrated
+
+### Machine Learning
+
+* TF-IDF Vectorization
+* Logistic Regression
+* Feature Engineering
+* Model Evaluation
+
+### Deep Learning
+
+* DistilBERT
+* Transfer Learning
+* Transformer Fine-Tuning
+* PyTorch
+
+### Natural Language Processing
+
+* Text Cleaning
+* Tokenization
+* Sentiment Analysis
+* Text Classification
+
+### Deployment & MLOps
+
+* Streamlit
+* Hugging Face Hub
+* GitHub
+* Model Serialization
+* Cloud Deployment
+
+### Software Engineering
+
+* Modular Project Structure
+* Reproducible Pipelines
+* Version Control
+* Environment Management
+
+---
+
+# 💡 Real-World Applications
+
+This solution can be adapted for:
+
+* Customer Feedback Analysis
+* Product Reviews
+* Social Media Monitoring
+* Brand Sentiment Tracking
+* Employee Feedback Analysis
+* Support Ticket Classification
+
+---
+
+# 🚀 Run Locally
+
+### Clone Repository
+
+```bash
+git clone https://github.com/ak0959/customer_sentiment_bert.git
+
+cd customer_sentiment_bert
+```
+
+### Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Launch Application
+
+```bash
+streamlit run streamlit_app.py
+```
+
+---
+
+# 🔮 Future Enhancements
+
+* Emotion Detection
+* Multi-Class Sentiment Classification
+* Explainable AI (SHAP/LIME)
+* Docker Deployment
+* CI/CD Pipelines
+* Model Monitoring Dashboard
+* A/B Testing Framework
+
+---
+
+# 👨‍💻 Author
+
+### Amit Kadia
+
+Senior Programme Manager | AI & Data Analytics Enthusiast
+
+Passionate about combining business problem-solving with practical AI and machine learning solutions.
+
+---
+
+## ⭐ If you found this project useful, consider giving it a star.
