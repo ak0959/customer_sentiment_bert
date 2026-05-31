@@ -26,10 +26,11 @@ https://customersentimentbert-n6emezcfiq7fbm72hqqgbs.streamlit.app
 
 ---
 
-## 📸 Application Preview
+## 📚 Additional Documentation
 
-<p align="center">
-  <img src="images/app_preview.png" alt="Dual Engine Sentiment Classifier" width="900">
+- [Adversarial Testing & Error Analysis](docs/adversarial_testing.md)
+
+A structured evaluation of both sentiment engines using sarcasm, negation, metaphorical language, counterfactual statements, and other challenging edge cases to better understand model behavior beyond traditional accuracy metrics.
 </p>
 
 <p align="center">
