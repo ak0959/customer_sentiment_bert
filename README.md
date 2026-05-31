@@ -437,6 +437,16 @@ streamlit run streamlit_app.py
 
 ---
 
+## 📚 Additional Documentation
+
+### Deep Dive Analysis
+
+- [Adversarial Testing & Error Analysis](docs/adversarial_testing.md)
+
+A structured evaluation of both sentiment engines using sarcasm, negation, metaphorical language, counterfactual statements, and other challenging edge cases to better understand model behavior beyond traditional accuracy metrics.
+
+---
+
 # 🔮 Future Enhancements
 
 * Emotion Detection
