@@ -22,7 +22,7 @@ def load_baseline_engine():
 
 @st.cache_resource
 def load_transformer_engine():
-    model_path = "models/distilbert_sentiment"
+    model_path = "amitkadia79/movie-sentiment-distilbert"
     tokenizer = AutoTokenizer.from_pretrained(model_path)
     model = AutoModelForSequenceClassification.from_pretrained(model_path)
     return tokenizer, model
