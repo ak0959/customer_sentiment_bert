@@ -1,0 +1,17 @@
+# Block python system junk
+__pycache__/
+*.pyc
+.DS_Store
+.streamlit/
+
+# Block large training datasets
+data/
+
+# Block heavy training checkpoints (saves GBs of space)
+models/bert_sentiment_checkpoints/
+
+# Block individual model weight files over 100MB (GitHub limit)
+*.safetensors
+*.bin
+*.pt
+*.pth
